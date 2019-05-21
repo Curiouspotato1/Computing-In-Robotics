@@ -1,0 +1,40 @@
+void setup() // Built-in initialization block
+{
+  /*This tone will allow one to make sure that there is not issues on the arduino board,
+   *Such as burnout, as the board would have trouble with this tone
+   *It is also known as a reset sound */
+  //Tone is compriesd of (pin, frequency, and time)
+   tone(4, 3000, 1000);
+   delay(1000);
+   //Declare The IR Receivers
+   pinMode(10, INPUT); 
+   pinMode(3, INPUT);
+   //Declare The LEDs
+   pinMode(8, OUTPUT); 
+   pinMode(7, OUTPUT);
+   Serial.begin(9600); // Set data rate to 9600 bps
+}
+
+void loop() // Main loop auto-repeats
+{
+ int irLeft = digitalRead(10); // Check for IR on left
+ int irRight = digitalRead(3); // Check for IR on right
+
+/*If either the right or left sensors detect a IR interference
+ * The the loop will go through the loop and make both an alarm sound
+ * As well as leds turning on, then off */
+ 
+ if((irRight == 0) && (irLeft == 0))
+   {
+   Serial.println("IR interference!!!"); // Display warning
+   for(int i = 0; i < 5; i++) // Repeat 5 times
+     {
+     digitalWrite(7, HIGH); // Turn indicator LEDs on
+     digitalWrite(8, HIGH);
+     tone(4, 2000, 20); // Sound alarm tone
+     delay(200); //Delay for the sound to play
+     digitalWrite(7, LOW); // Turn indicator LEDs off
+     digitalWrite(8, LOW);
+     }
+   }
+} 
